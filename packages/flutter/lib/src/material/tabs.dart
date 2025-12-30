@@ -926,6 +926,7 @@ class TabBar extends StatefulWidget implements PreferredSizeWidget {
     super.key,
     required this.tabs,
     this.controller,
+    this.scrollController,
     this.isScrollable = false,
     this.padding,
     this.indicatorColor,
@@ -981,6 +982,7 @@ class TabBar extends StatefulWidget implements PreferredSizeWidget {
     super.key,
     required this.tabs,
     this.controller,
+    this.scrollController,
     this.isScrollable = false,
     this.padding,
     this.indicatorColor,
@@ -1023,6 +1025,11 @@ class TabBar extends StatefulWidget implements PreferredSizeWidget {
   /// If [TabController] is not provided, then the value of [DefaultTabController.of]
   /// will be used.
   final TabController? controller;
+
+  /// The [ScrollController] for this [TabBar].
+  ///
+  /// This controller can be used to manipulate the scroll position of the [TabBar].
+  final TabBarScrollController? scrollController;
 
   /// Whether this tab bar can be scrolled horizontally.
   ///
@@ -1449,7 +1456,7 @@ class TabBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _TabBarState extends State<TabBar> {
-  ScrollController? _scrollController;
+  TabBarScrollController? _internalScrollController;
   TabController? _controller;
   _IndicatorPainter? _indicatorPainter;
   int? _currentIndex;
@@ -1479,6 +1486,14 @@ class _TabBarState extends State<TabBar> {
     } else {
       return _TabsDefaultsM2(context, widget.isScrollable);
     }
+  }
+
+  TabBarScrollController? get _effectiveScrollController {
+    if (widget.scrollController != null) {
+      return widget.scrollController;
+    }
+
+    return _internalScrollController ??= TabBarScrollController();
   }
 
   Decoration _getIndicator(TabBarIndicatorSize indicatorSize) {
@@ -1627,12 +1642,16 @@ class _TabBarState extends State<TabBar> {
   @override
   void didUpdateWidget(TabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.controller != oldWidget.controller) {
+    if (widget.controller != oldWidget.controller ||
+        widget.scrollController != oldWidget.scrollController) {
       _updateTabController();
       _initIndicatorPainter();
+
+      final TabBarScrollController? scrollController = _effectiveScrollController;
+
       // Adjust scroll position.
-      if (_scrollController != null && _scrollController!.hasClients) {
-        final ScrollPosition position = _scrollController!.position;
+      if (scrollController != null && scrollController.hasClients) {
+        final ScrollPosition position = scrollController.position;
         if (position is _TabBarScrollPosition) {
           position.markNeedsPixelsCorrection();
         }
@@ -1666,7 +1685,7 @@ class _TabBarState extends State<TabBar> {
       _controller!.removeListener(_handleTabControllerTick);
     }
     _controller = null;
-    _scrollController?.dispose();
+    _internalScrollController?.dispose();
     // We don't own the _controller Animation, so it's not disposed here.
     super.dispose();
   }
