@@ -19,6 +19,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'semantics_tester.dart';
 import 'utils.dart';
+import 'widgets_app_tester.dart';
 
 void main() {
   group('RawImage', () {
@@ -830,8 +831,7 @@ void main() {
       const double fontSize2 = 12;
 
       await tester.pumpWidget(
-        WidgetsApp(
-          color: const Color(0xFFFFFFFF),
+        TestWidgetsApp(
           home: Align(
             alignment: Alignment.topLeft,
             child: Row(
@@ -859,16 +859,6 @@ void main() {
               ],
             ),
           ),
-          pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) {
-            return PageRouteBuilder<T>(
-              pageBuilder:
-                  (
-                    BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                  ) => builder(context),
-            );
-          },
         ),
       );
 
@@ -908,8 +898,7 @@ void main() {
       const double fontSize2 = 12;
 
       await tester.pumpWidget(
-        WidgetsApp(
-          color: const Color(0xFFFFFFFF),
+        TestWidgetsApp(
           home: Align(
             alignment: Alignment.topLeft,
             child: Row(
@@ -938,16 +927,6 @@ void main() {
               ],
             ),
           ),
-          pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) {
-            return PageRouteBuilder<T>(
-              pageBuilder:
-                  (
-                    BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                  ) => builder(context),
-            );
-          },
         ),
       );
 
