@@ -6,14 +6,13 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'semantics_tester.dart';
 import 'utils.dart';
-
-// TODO(navaronbracke): remove MaterialApp & material import
+import 'widgets_app_tester.dart';
 
 void main() {
   group(WidgetOrderTraversalPolicy, () {
@@ -443,7 +442,7 @@ void main() {
       addTearDown(testNode2.dispose);
 
       await tester.pumpWidget(
-        MaterialApp(
+        TestWidgetsApp(
           home: FocusTraversalGroup(
             policy: WidgetOrderTraversalPolicy(),
             child: Center(
@@ -1543,7 +1542,7 @@ void main() {
       addTearDown(testNode2.dispose);
 
       await tester.pumpWidget(
-        MaterialApp(
+        TestWidgetsApp(
           home: FocusTraversalGroup(
             policy: OrderedTraversalPolicy(secondary: WidgetOrderTraversalPolicy()),
             child: Center(
@@ -2376,7 +2375,7 @@ void main() {
         final GlobalKey lowerRightKey = GlobalKey(debugLabel: 'lowerRightKey');
 
         await tester.pumpWidget(
-          MaterialApp(
+          TestWidgetsApp(
             home: Directionality(
               textDirection: TextDirection.ltr,
               child: FocusScope(
@@ -2465,7 +2464,7 @@ void main() {
         final GlobalKey key3 = GlobalKey(debugLabel: 'key3');
 
         await tester.pumpWidget(
-          MaterialApp(
+          TestWidgetsApp(
             home: Directionality(
               textDirection: TextDirection.ltr,
               child: FocusScope(
@@ -2534,7 +2533,7 @@ void main() {
         addTearDown(controller.dispose);
 
         await tester.pumpWidget(
-          MaterialApp(
+          TestWidgetsApp(
             home: Column(
               children: <Widget>[
                 Focus(focusNode: topNode, child: Container(height: 100)),
@@ -2658,7 +2657,7 @@ void main() {
         addTearDown(controller.dispose);
 
         await tester.pumpWidget(
-          MaterialApp(
+          TestWidgetsApp(
             home: Row(
               children: <Widget>[
                 Focus(focusNode: leftNode, child: Container(width: 100)),
@@ -2803,7 +2802,7 @@ void main() {
         });
 
         await tester.pumpWidget(
-          MaterialApp(
+          TestWidgetsApp(
             home: Column(
               children: <Widget>[
                 Focus(
@@ -2930,7 +2929,7 @@ void main() {
         });
 
         await tester.pumpWidget(
-          MaterialApp(
+          TestWidgetsApp(
             home: Row(
               children: <Widget>[
                 Focus(
@@ -3062,7 +3061,7 @@ void main() {
             ),
           };
 
-          return MaterialApp(
+          return TestWidgetsApp(
             home: Shortcuts(
               shortcuts: shortcuts,
               child: FocusScope(
@@ -3168,7 +3167,7 @@ void main() {
       (WidgetTester tester) async {
         final events = <Object>[];
 
-        await tester.pumpWidget(MaterialApp(home: Container()));
+        await tester.pumpWidget(TestWidgetsApp(home: Container()));
 
         HardwareKeyboard.instance.addHandler((KeyEvent event) {
           events.add(event);
@@ -3188,7 +3187,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        const TestWidgetsApp(
           home: SizedBox.expand(child: Center(child: Text('title'))),
         ),
       );
@@ -3203,21 +3202,7 @@ void main() {
       (WidgetTester tester) async {
         final events = <KeyEvent>[];
 
-        await tester.pumpWidget(
-          MaterialApp(
-            onGenerateRoute: (RouteSettings settings) => PageRouteBuilder<void>(
-              settings: settings,
-              pageBuilder:
-                  (
-                    BuildContext context,
-                    Animation<double> animation1,
-                    Animation<double> animation2,
-                  ) {
-                    return const Placeholder();
-                  },
-            ),
-          ),
-        );
+        await tester.pumpWidget(const TestWidgetsApp(home: Placeholder()));
 
         HardwareKeyboard.instance.addHandler((KeyEvent event) {
           events.add(event);
@@ -3662,7 +3647,7 @@ void main() {
     }
 
     await tester.pumpWidget(
-      MaterialApp(
+      TestWidgetsApp(
         home: Column(
           children: <Widget>[
             TestButton(focusNode: nodeA, child: const Text('A'), onPressed: () {}),
@@ -3736,7 +3721,7 @@ void main() {
     }
 
     await tester.pumpWidget(
-      MaterialApp(
+      TestWidgetsApp(
         home: Focus(
           focusNode: scope,
           child: Column(
@@ -3837,7 +3822,7 @@ void main() {
     addTearDown(nodeA.dispose);
 
     await tester.pumpWidget(
-      MaterialApp(
+      TestWidgetsApp(
         home: SingleChildScrollView(
           child: TestButton(focusNode: nodeA, child: const Text('A'), onPressed: () {}),
         ),
@@ -3935,7 +3920,7 @@ void main() {
           child: home,
         );
       }
-      await tester.pumpWidget(MaterialApp(home: home));
+      await tester.pumpWidget(TestWidgetsApp(home: home));
     }
 
     await pumpApp();
@@ -4064,7 +4049,7 @@ void main() {
       addTearDown(enabledButton2Node.dispose);
 
       await tester.pumpWidget(
-        MaterialApp(
+        TestWidgetsApp(
           home: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
