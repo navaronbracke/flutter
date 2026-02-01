@@ -40,6 +40,7 @@ class TestWidgetsApp extends StatelessWidget {
     required this.home,
     this.color = const Color(0xFFFFFFFF),
     this.navigatorKey,
+    this.routes = const <String, WidgetBuilder>{},
   });
 
   /// The widget to display within the app.
@@ -53,12 +54,16 @@ class TestWidgetsApp extends StatelessWidget {
   /// The [GlobalKey] for the [Navigator] created by this app.
   final GlobalKey<NavigatorState>? navigatorKey;
 
+  /// The routes for the application.
+  final Map<String, WidgetBuilder> routes;
+
   @override
   Widget build(BuildContext context) {
     return WidgetsApp(
       color: color,
       home: home,
       navigatorKey: navigatorKey,
+      routes: routes,
       pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) {
         return PageRouteBuilder<T>(
           pageBuilder:
