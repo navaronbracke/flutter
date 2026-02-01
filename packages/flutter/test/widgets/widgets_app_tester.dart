@@ -59,11 +59,6 @@ class TestWidgetsApp extends StatelessWidget {
       color: color,
       home: home,
       navigatorKey: navigatorKey,
-      builder: (BuildContext context, Widget? child) {
-        return Overlay(
-          initialEntries: <OverlayEntry>[OverlayEntry(builder: (BuildContext context) => home)],
-        );
-      },
       pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) {
         return PageRouteBuilder<T>(
           pageBuilder:
