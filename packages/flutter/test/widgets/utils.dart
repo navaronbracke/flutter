@@ -61,6 +61,24 @@ class TestButton extends StatelessWidget {
   }
 }
 
+/// A [Page] that creates a [Route] with a [PageRoute.transitionDuration] set to [Duration.zero].
+class TestPageWithZeroTransitionDuration<T> extends Page<T> {
+  const TestPageWithZeroTransitionDuration({required this.child});
+
+  final Widget child;
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return TestRoute(
+      settings: this,
+      allowSnapshotting: false,
+      // ignore: avoid_redundant_argument_values
+      transitionDuration: Duration.zero,
+      child: child,
+    );
+  }
+}
+
 class TestRoute<T> extends PageRoute<T> {
   TestRoute({
     this.child,
@@ -69,11 +87,14 @@ class TestRoute<T> extends PageRoute<T> {
     this.barrierColor,
     this.maintainState = false,
     this.transitionDuration = Duration.zero,
+    this.transitionsBuilder,
     super.fullscreenDialog,
+    super.allowSnapshotting,
   }) : assert(child != null || builder != null, 'Either child or builder must be provided.');
 
   final Widget? child;
   final WidgetBuilder? builder;
+  final PageTransitionsBuilder? transitionsBuilder;
 
   @override
   final Duration transitionDuration;
@@ -103,6 +124,16 @@ class TestRoute<T> extends PageRoute<T> {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    return child;
+    if (transitionsBuilder == null) {
+      return child;
+    }
+
+    return transitionsBuilder!.buildTransitions<T>(
+      this,
+      context,
+      animation,
+      secondaryAnimation,
+      child,
+    );
   }
 }
