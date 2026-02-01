@@ -35,7 +35,12 @@ import 'package:flutter/widgets.dart';
 // Tracking issue: https://github.com/flutter/flutter/issues/181283
 class TestWidgetsApp extends StatelessWidget {
   /// Creates a minimal [WidgetsApp] for testing.
-  const TestWidgetsApp({super.key, required this.home, this.color = const Color(0xFFFFFFFF)});
+  const TestWidgetsApp({
+    super.key,
+    required this.home,
+    this.color = const Color(0xFFFFFFFF),
+    this.navigatorKey,
+  });
 
   /// The widget to display within the app.
   final Widget home;
@@ -45,11 +50,20 @@ class TestWidgetsApp extends StatelessWidget {
   /// Defaults to white.
   final Color color;
 
+  /// The [GlobalKey] for the [Navigator] created by this app.
+  final GlobalKey<NavigatorState>? navigatorKey;
+
   @override
   Widget build(BuildContext context) {
     return WidgetsApp(
       color: color,
       home: home,
+      navigatorKey: navigatorKey,
+      builder: (BuildContext context, Widget? child) {
+        return Overlay(
+          initialEntries: <OverlayEntry>[OverlayEntry(builder: (BuildContext context) => home)],
+        );
+      },
       pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) {
         return PageRouteBuilder<T>(
           pageBuilder:
