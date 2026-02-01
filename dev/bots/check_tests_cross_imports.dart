@@ -189,7 +189,6 @@ class TestsCrossImportChecker {
     'packages/flutter/test/widgets/scrollable_selection_test.dart',
     'packages/flutter/test/widgets/physical_model_test.dart',
     'packages/flutter/test/widgets/spell_check_test.dart',
-    'packages/flutter/test/widgets/toggleable_test.dart',
     'packages/flutter/test/widgets/draggable_test.dart',
     'packages/flutter/test/widgets/page_transitions_builder_test.dart',
     'packages/flutter/test/widgets/selectable_region_context_menu_test.dart',
